@@ -57,7 +57,7 @@ To use Robinson, you'll need to create a new app in the Spotify Developer Dashbo
 7. Finally, create a new `.env` file in the root directory of the Robinson repository, and add the
    following lines:
 
-   ```
+   ```sh
    SPOTIFY_CLIENT_ID=<your client ID here>
    SPOTIFY_CLIENT_SECRET=<your client secret here>
    SPOTIFY_REDIRECT_URI=http://localhost:8000
@@ -70,7 +70,7 @@ To use Robinson, you'll need to create a new app in the Spotify Developer Dashbo
 
 To use Robinson, simply run the `recently_played.py` script:
 
-```
+```sh
 python recently_played.py
 ```
 
