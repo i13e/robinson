@@ -9,31 +9,31 @@ To get started with Robinson, follow these steps:
 
 1. Clone the Robinson repository:
 
-   ```
+   ```sh
    git clone https://github.com/i13e/robinson
    ```
 
 2. Change into the Robinson directory:
 
-   ```
+   ```sh
    cd robinson
    ```
 
 3. Create a new virtual environment:
 
-   ```
+   ```sh
    python -m venv env
    ```
 
 4. Activate the virtual environment:
 
-   ```
+   ```sh
    source env/bin/activate  # for Mac/Linux
    ```
 
 5. Install the required packages:
 
-   ```
+   ```sh
    pip install -r requirements.txt
    ```
 
