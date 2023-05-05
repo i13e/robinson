@@ -13,10 +13,6 @@ load_dotenv()
 DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
 
 
-class EmptyDataFrameError(Exception):
-    """Raised when the input DataFrame is empty"""
-
-
 class PrimaryKeyError(Exception):
     """Raised when the primary key check fails"""
 
@@ -92,7 +88,7 @@ def transform_data(data: dict) -> pd.DataFrame:
     return pd.DataFrame(song_dict, columns=["song_name", "artist_name", "played_at", "timestamp"])
 
 
-def validate_data(df: pd.DataFrame) -> None:
+def validate_data(df: pd.DataFrame) -> bool:
     """
     Validate the DataFrame by checking for nulls, primary key violation,
     and correct date.
@@ -100,8 +96,10 @@ def validate_data(df: pd.DataFrame) -> None:
     Args:
         df (pd.DataFrame): Data to be validated
 
+    Returns:
+        bool: indicating whether the dataframe is empty
+
     Raises:
-        EmptyDataFrameError: If the input DataFrame is empty
         PrimaryKeyViolationError: If the primary key check fails
         NullValuesError: If null values are found in the input DataFrame
         InvalidTimestampError: If at least one song has an invalid timestamp
@@ -109,7 +107,8 @@ def validate_data(df: pd.DataFrame) -> None:
 
     # Check if the dataframe is empty
     if df.empty:
-        raise EmptyDataFrameError("No songs downloaded.")
+        print("No songs downloaded")
+        return False
 
     # Primary Key Check
     if not pd.Series(df['played_at']).is_unique:
@@ -124,7 +123,7 @@ def validate_data(df: pd.DataFrame) -> None:
     if any(dt.datetime.strptime(ts, "%Y-%m-%d") != today for ts in df["timestamp"]):
         raise InvalidTimestampError("At least one song does not have today's timestamp")
 
-    print("Data valid, proceed to Load stage")
+    return True
 
 
 
@@ -180,12 +179,11 @@ def main() -> None:
     print(df)
 
     # Validate data in the DataFrame
-    validate_data(df)
+    if validate_data(df):
+        # Load data into SQLite database
+        load_data(df)
+        print("ETL process completed.")
 
-    # Load data into SQLite database
-    load_data(df)
-
-    print("ETL process completed.")
 
 if __name__ == "__main__":
     main()
